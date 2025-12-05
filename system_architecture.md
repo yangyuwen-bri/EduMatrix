@@ -87,19 +87,19 @@
 
 ```mermaid
 graph TD
-    User[用户] --> Frontend[前端 (Vue3)]
-    Frontend -->|API 请求 (Role, UserID)| Backend[后端 (FastAPI)]
+    User["用户"] --> Frontend["前端 (Vue3)"]
+    Frontend -->|"API 请求 (Role, UserID)"| Backend["后端 (FastAPI)"]
     
     subgraph "后端服务"
-        Backend --> Router{路由分发}
-        Router --> QA[答疑 Agent]
-        Router --> Quiz[出题 Agent]
-        Router --> Grade[批改 Agent]
-        Router --> KB[知识库管理]
+        Backend --> Router{"路由分发"}
+        Router --> QA["答疑 Agent"]
+        Router --> Quiz["出题 Agent"]
+        Router --> Grade["批改 Agent"]
+        Router --> KB["知识库管理"]
         
-        QA & Quiz & Grade --> RAG[RAG 服务]
-        KB -->|上传/索引| Chroma[ChromaDB 向量库]
-        RAG -->|检索| Chroma
-        RAG -->|生成| LLM[大模型 (DeepSeek)]
+        QA & Quiz & Grade --> RAG["RAG 服务"]
+        KB -->|"上传/索引"| Chroma["ChromaDB 向量库"]
+        RAG -->|"检索"| Chroma
+        RAG -->|"生成"| LLM["大模型 (DeepSeek)"]
     end
 ```
