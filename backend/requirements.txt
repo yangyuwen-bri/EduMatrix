@@ -8,3 +8,4 @@ chromadb
 python-docx
 pypdf
 python-multipart
+sentence-transformers

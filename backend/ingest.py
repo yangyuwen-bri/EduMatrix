@@ -21,7 +21,9 @@ def ingest_data():
 
     # Create collection
     # Use a better Chinese embedding model
-    ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="shibing624/text2vec-base-chinese")
+    model_name_or_path = os.getenv("MODEL_PATH", "shibing624/text2vec-base-chinese")
+    print(f"Loading embedding model from: {model_name_or_path}")
+    ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=model_name_or_path)
     collection = client.create_collection(name=COLLECTION_NAME, embedding_function=ef)
 
     documents = []

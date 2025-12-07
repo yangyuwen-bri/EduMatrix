@@ -10,7 +10,12 @@ class RAGService:
         self.db_path = "./chroma_db"
         self.collection_name = "journalism_knowledge"
         self.client = chromadb.PersistentClient(path=self.db_path)
-        self.ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="shibing624/text2vec-base-chinese")
+        
+        # Determine model path: use local if set, else download/use from HF
+        model_name_or_path = os.getenv("MODEL_PATH", "shibing624/text2vec-base-chinese")
+        print(f"Loading embedding model from: {model_name_or_path}")
+        
+        self.ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=model_name_or_path)
         self.collection = None
         
         # Initialize OpenAI Client

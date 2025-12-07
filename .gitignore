@@ -32,3 +32,9 @@ dist-ssr/
 *.local
 frontend/dist/
 frontend/node_modules/
+
+# Models (Large files)
+models/
+
+# Personal Docs
+阿里云部署指南.md

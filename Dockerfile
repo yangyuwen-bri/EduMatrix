@@ -11,9 +11,23 @@ WORKDIR /app
 # Copy the backend requirements file
 COPY backend/requirements.txt .
 
-# Install any needed packages specified in requirements.txt
-# Use a mirror for faster installation in China (optional but recommended for Aliyun)
+# Install dependencies
+# Use a mirror for faster installation in China
 RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# Install huggingface_hub to download models
+RUN pip install --no-cache-dir huggingface_hub -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# Build argument for HF Mirror (can be overridden at build time)
+ARG HF_ENDPOINT=https://hf-mirror.com
+ENV HF_ENDPOINT=${HF_ENDPOINT}
+
+# Copy the locally downloaded model directory to the container
+# This requires running 'python download_model.py' first on the host
+COPY models /app/models
+
+# Set the MODEL_PATH environment variable for the application to use
+ENV MODEL_PATH=/app/models/text2vec-base-chinese
 
 # Copy the entire project
 COPY . .

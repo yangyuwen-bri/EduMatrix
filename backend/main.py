@@ -27,10 +27,13 @@ app.include_router(quiz_agent.router)
 app.include_router(grading_agent.router)
 app.include_router(kb_agent.router)
 
+# Serve static assets (JS, CSS, images) from the Vue build output
+app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"), name="assets")
+
 # Serve index.html at root
 @app.get("/")
 async def read_index():
-    return FileResponse("../index.html")
+    return FileResponse("../frontend/dist/index.html")
 
 @app.get("/health")
 def health_check():

@@ -95,3 +95,54 @@ npm run dev
 
 ## 📄 许可证
 MIT License
+
+## 部署说明 (基于阿里云)
+
+本应用已优化为"模型内置"模式，特别适合国内服务器（如阿里云）部署。应用镜像内已包含必要的 Embedding 模型（text2vec-base-chinese），启动时无需下载，完全离线运行。
+
+### 1. 构建镜像 (推荐 Offline 模式)
+
+本应用已优化为"模型内置"模式，构建分为两步：
+
+1.  **下载模型 (本地)**：
+    ```bash
+    python download_model.py
+    ```
+    *(这一步会将模型下载到 `models/` 目录)*
+
+2.  **构建镜像**：
+    
+    *   **通用构建**:
+        ```bash
+        docker build -t journalism-agent:latest .
+        ```
+    *   **在 Mac (M1/M2) 上为服务器构建 (AMD64)**:
+        ```bash
+        docker build --platform linux/amd64 -t journalism-agent:latest .
+        ```
+
+### 2. 推送到镜像仓库
+
+```bash
+# 登录 (示例)
+docker login --username=your_username registry.cn-shanghai.aliyuncs.com
+
+# 标记并推送
+docker tag journalism-agent:latest registry.cn-shanghai.aliyuncs.com/your-namespace/journalism-agent:latest
+docker push registry.cn-shanghai.aliyuncs.com/your-namespace/journalism-agent:latest
+```
+
+### 3. 在服务器上运行
+
+```bash
+docker run -d \
+  -p 8000:8000 \
+  --restart always \
+  -e OPENAI_API_KEY="sk-xxx" \
+  -e OPENAI_BASE_URL="https://api.deepseek.com" \
+  -e LLM_MODEL="deepseek-chat" \
+  --name my-agent \
+  registry.cn-shanghai.aliyuncs.com/your-namespace/journalism-agent:latest
+```
+
+由于模型已内置（且前端已打包），服务启动即可直接访问 `http://<服务器IP>:8000`。
